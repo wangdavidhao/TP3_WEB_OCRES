@@ -30,3 +30,4 @@ class API_WEATHER{
     return `<img src=${API_URL_ICON}${icon}@2x.png class="weather-icon"/>`
   }
 }
+
