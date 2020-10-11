@@ -34,6 +34,20 @@ class API_WEATHER{
     })
 
   }
+
+  getOneWeekForecast(){
+    return axios
+    .get(`${API_URL}?q=${this.city}&lang=fr&units=metric&cnt=7&appid=${API_KEY}`,{
+      crossdimain: true
+    })
+  }
+
+  getTwoWeekForecast(){
+    return axios
+    .get(`${API_URL}?q=${this.city}&lang=fr&units=metric&cnt=14&appid=${API_KEY}`,{
+      crossdimain: true
+    })
+  }
  
   // Retourne l'element HTML de l'icon symbolisant la méteo.
   getHTMLElementFromIcon(icon){

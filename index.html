@@ -3,25 +3,25 @@
 
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width" />
-  <title>TP 3</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
+  <title>Météo</title>
   <link href="style.css" rel="stylesheet" type="text/css" />
+  <link rel="icon" href="weather.png" />
   <!-- bootstrap -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-    crossorigin="anonymous"></script>
   <!-- Axios -->
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
 
-<body onload='start()'>
-  <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
-    <h5 class="my-0 mr-md-auto font-weight-normal">METEO PREDICTION TP3</h5>
+<body onload='generateDays()'>
+  <div
+    class="d-flex flex-column flex-md-row align-items-center justify-content-center p-3  mb-3 bg-white border-bottom shadow-sm">
+    <h5 class="my-0  font-weight-normal t text-center">METEO PREDICTION TP3<img class="logo" src="weather.png"
+        height="30px"></h5>
   </div>
 
-  <div class="px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+  <div class="px-3 py-1 pt-md-5 md-4 mx-auto text-center">
     <h2 class="display-4">Méteo App</h2>
     <p class="lead">
       Application de prédiction méteo
@@ -29,19 +29,32 @@
   </div>
 
   <div class="container">
-    <div class="input-group mb-5 offset-4 col-4">
-      <input id="city-input" type="text" class="form-control" placeholder="Rentrer le nom d'une ville">
-      <div class="input-group-append">
-        <button id="city-input-button" class="btn btn-success" type="submit" onclick='start()'>Actualiser</button>
+    <div class="row d-flex align-items-center justify-content-center mb-5">
+      <div class="input-group col-6">
+        <input id="city-input" type="text" class="form-control" placeholder="Rentrer le nom d'une ville">
+        <div class="input-group-append">
+          <button id="city-input-button" class="btn btn-success" type="submit"
+            onclick='generateDays()'>Actualiser</button>
+        </div>
       </div>
+
+      <div class="col-6">
+        <select id="daysOption" onclick='moreDays()'>
+          <option value="4 jours" selected="selected">4 jours</option>
+          <option value="7 jours">7 jours</option>
+          <option value="14 jours">14 jours</option>
+        </select>
+      </div>
+
     </div>
+
   </div>
 
   <div class="container">
     <div class="card-deck mb-3 text-center">
       <div class="card mb-4 shadow-sm offset-sm-1">
         <div class="card-header">
-          <h4 class="my-0 font-weight-normal" id="city">Aujourd'hui</h4>
+          <h5 class="my-0 font-weight-normal" id="city">Aujourd'hui</h5>
         </div>
         <div class="card-body">
           <h2 id="today-forecast-main" class="card-title">
@@ -49,7 +62,7 @@
           <div>
             <p id="today-forecast-more-info"></p>
             <div id="icon-weather-container"></div>
-            <h3 id="today-forecast-temp"> </h3>
+            <h5 id="today-forecast-temp"> </h5>
           </div>
           <button type="button" class="btn btn-lg btn-block btn-primary button-load-forecast">
             Quel temps fait'il aujourd'hui ?
@@ -59,53 +72,235 @@
     </div>
 
     <div class="container">
-      <div class="card-deck mb-3 text-center">
-        <div class="card mb-4 shadow-sm offset-sm-1 nextDay">
-          <div class="card-header">
-            <h4 class="my-0 font-weight-normal">Demain</h4>
+      <div class="row d-flex justify-content-center">
+
+        <div class=" col-lg-3 col-md-6 col-sm-12 card mb-4 shadow-sm " id="nextDay1">
+          <div class="card-header text-center">
+            <h5 class="my-0 font-weight-normal" id="date1"></h5>
           </div>
-          <div class="card-body">
+          <div class="card-body d-flex flex-column  align-items-center justify-content-center">
             <h2 id="today-forecast-main-next1" class="card-title">
             </h2>
             <div>
               <p id="today-forecast-more-info-next1"></p>
-              <div id="icon-weather-container-next1"></div>
-              <h3 id="today-forecast-temp-next1"> </h3>
+              <div id="icon-weather-container-next1">
+              </div>
+              <h5 id="today-forecast-temp-next1"> </h5>
             </div>
           </div>
         </div>
-        <div class="card mb-4 shadow-sm offset-sm-1 nextDay">
-          <div class="card-header">
-            <h4 class="my-0 font-weight-normal">Après demain</h4>
+        <div class=" col-lg-3 col-md-6 col-sm-12  card mb-4  shadow-sm  " id="nextDay2">
+          <div class="card-header text-center">
+            <h5 class="my-0 font-weight-normal" id="date2"></h5>
           </div>
-          <div class="card-body">
+          <div class="card-body d-flex flex-column  align-items-center justify-content-center">
             <h2 id="today-forecast-main-next2" class="card-title">
             </h2>
             <div>
               <p id="today-forecast-more-info-next2"></p>
               <div id="icon-weather-container-next2"></div>
-              <h3 id="today-forecast-temp-next2"> </h3>
+              <h5 id="today-forecast-temp-next2"> </h5>
             </div>
           </div>
         </div>
-        <div class="card mb-4 shadow-sm offset-sm-1 nextDay">
-          <div class="card-header">
-            <h4 class="my-0 font-weight-normal">Encore après demain</h4>
+        <div class="col-lg-3 col-md-6 col-sm-12  card mb-4  shadow-sm  " id="nextDay3">
+          <div class="card-header text-center">
+            <h5 class="my-0 font-weight-normal" id="date3"></h5>
           </div>
-          <div class="card-body">
+          <div class="card-body d-flex flex-column  align-items-center justify-content-center">
             <h2 id="today-forecast-main-next3" class="card-title">
             </h2>
             <div>
               <p id="today-forecast-more-info-next3"></p>
               <div id="icon-weather-container-next3"></div>
-              <h3 id="today-forecast-temp-next3"> </h3>
+              <h5 id="today-forecast-temp-next3"> </h5>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12  card mb-4  shadow-sm " id="nextDay4">
+          <div class="card-header text-center">
+            <h5 class="my-0 font-weight-normal" id="date4"></h5>
+          </div>
+          <div class="card-body d-flex flex-column  align-items-center justify-content-center">
+            <h2 id="today-forecast-main-next4" class="card-title">
+            </h2>
+            <div>
+              <p id="today-forecast-more-info-next4"></p>
+              <div id="icon-weather-container-next4"></div>
+              <h5 id="today-forecast-temp-next4"> </h5>
             </div>
           </div>
         </div>
       </div>
+
+      <div class="row d-flex justify-content-center">
+
+        <div class="card mb-4 px-2 shadow-sm  col-lg-3 col-md-6" id="nextDay5">
+          <div class="card-header text-center">
+            <h5 class="my-0 font-weight-normal" id="date5"></h5>
+          </div>
+          <div class="card-body d-flex flex-column  align-items-center justify-content-center">
+            <h2 id="today-forecast-main-next5" class="card-title">
+            </h2>
+            <div>
+              <p id="today-forecast-more-info-next5"></p>
+              <div id="icon-weather-container-next5"></div>
+              <h5 id="today-forecast-temp-next5"> </h5>
+            </div>
+          </div>
+        </div>
+        <div class="card mb-4 px-2 shadow-sm  col-lg-3 col-md-6" id="nextDay6">
+          <div class="card-header text-center">
+            <h5 class="my-0 font-weight-normal" id="date6"></h5>
+          </div>
+          <div class="card-body d-flex flex-column  align-items-center justify-content-center">
+            <h2 id="today-forecast-main-next6" class="card-title">
+            </h2>
+            <div>
+              <p id="today-forecast-more-info-next6"></p>
+              <div id="icon-weather-container-next6"></div>
+              <h5 id="today-forecast-temp-next6"> </h5>
+            </div>
+          </div>
+        </div>
+        <div class="card mb-4 px-2 shadow-sm   col-lg-3 col-md-6" id="nextDay7">
+          <div class="card-header text-center">
+            <h5 class="my-0 font-weight-normal" id="date7"></h5>
+          </div>
+          <div class="card-body d-flex flex-column  align-items-center justify-content-center">
+            <h2 id="today-forecast-main-next7" class="card-title">
+            </h2>
+            <div>
+              <p id="today-forecast-more-info-next7"></p>
+              <div id="icon-weather-container-next7"></div>
+              <h5 id="today-forecast-temp-next7"> </h5>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
     </div>
+
+    <div class="container">
+      <div class="row d-flex justify-content-center">
+
+        <div class=" col-lg-3 col-md-6 col-sm-12 card mb-4 shadow-sm " id="nextDay8">
+          <div class="card-header text-center">
+            <h5 class="my-0 font-weight-normal" id="date8"></h5>
+          </div>
+          <div class="card-body d-flex flex-column  align-items-center justify-content-center">
+            <h2 id="today-forecast-main-next8" class="card-title">
+            </h2>
+            <div>
+              <p id="today-forecast-more-info-next8"></p>
+              <div id="icon-weather-container-next8">
+              </div>
+              <h5 id="today-forecast-temp-next8"> </h5>
+            </div>
+          </div>
+        </div>
+        <div class=" col-lg-3 col-md-6 col-sm-12  card mb-4  shadow-sm  " id="nextDay9">
+          <div class="card-header text-center">
+            <h5 class="my-0 font-weight-normal" id="date9"></h5>
+          </div>
+          <div class="card-body d-flex flex-column  align-items-center justify-content-center">
+            <h2 id="today-forecast-main-next9" class="card-title">
+            </h2>
+            <div>
+              <p id="today-forecast-more-info-next9"></p>
+              <div id="icon-weather-container-next9"></div>
+              <h5 id="today-forecast-temp-next9"> </h5>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12  card mb-4  shadow-sm  " id="nextDay10">
+          <div class="card-header text-center">
+            <h5 class="my-0 font-weight-normal" id="date10"></h5>
+          </div>
+          <div class="card-body d-flex flex-column  align-items-center justify-content-center">
+            <h2 id="today-forecast-main-next10" class="card-title">
+            </h2>
+            <div>
+              <p id="today-forecast-more-info-next10"></p>
+              <div id="icon-weather-container-next10"></div>
+              <h5 id="today-forecast-temp-next10"> </h5>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12  card mb-4  shadow-sm " id="nextDay11">
+          <div class="card-header text-center">
+            <h5 class="my-0 font-weight-normal" id="date11"></h5>
+          </div>
+          <div class="card-body d-flex flex-column  align-items-center justify-content-center">
+            <h2 id="today-forecast-main-next11" class="card-title">
+            </h2>
+            <div>
+              <p id="today-forecast-more-info-next11"></p>
+              <div id="icon-weather-container-next11"></div>
+              <h5 id="today-forecast-temp-next11"> </h5>
+            </div>
+          </div>
+        </div>
+        <div class="card mb-4 px-2 shadow-sm  col-lg-3 col-md-6" id="nextDay12">
+          <div class="card-header text-center">
+            <h5 class="my-0 font-weight-normal" id="date12"></h5>
+          </div>
+          <div class="card-body d-flex flex-column  align-items-center justify-content-center">
+            <h2 id="today-forecast-main-next12" class="card-title">
+            </h2>
+            <div>
+              <p id="today-forecast-more-info-next12"></p>
+              <div id="icon-weather-container-next12"></div>
+              <h5 id="today-forecast-temp-next12"> </h5>
+            </div>
+          </div>
+        </div>
+        <div class="card mb-4 px-2 shadow-sm  col-lg-3 col-md-6" id="nextDay13">
+          <div class="card-header text-center">
+            <h5 class="my-0 font-weight-normal" id="date13"></h5>
+          </div>
+          <div class="card-body d-flex flex-column  align-items-center justify-content-center">
+            <h2 id="today-forecast-main-next13" class="card-title">
+            </h2>
+            <div>
+              <p id="today-forecast-more-info-next13"></p>
+              <div id="icon-weather-container-next13"></div>
+              <h5 id="today-forecast-temp-next13"> </h5>
+            </div>
+          </div>
+        </div>
+        <div class="card mb-4 px-2 shadow-sm  col-lg-3 col-md-6" id="nextDay14">
+          <div class="card-header text-center">
+            <h5 class="my-0 font-weight-normal" id="date14"></h5>
+          </div>
+          <div class="card-body d-flex flex-column  align-items-center justify-content-center">
+            <h2 id="today-forecast-main-next14" class="card-title">
+            </h2>
+            <div>
+              <p id="today-forecast-more-info-next14"></p>
+              <div id="icon-weather-container-next14"></div>
+              <h5 id="today-forecast-temp-next14"> </h5>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+      crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+      crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+      crossorigin="anonymous"></script>
     <script src="js/API_Weather.js"></script>
     <script src="js/script.js"></script>
+
 </body>
 
 </html>

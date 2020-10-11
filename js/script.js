@@ -1,4 +1,4 @@
-function start() {
+function generateDays(numberDays) {
 
   let apiWeather = null;
   let city = document.getElementById('city-input').value;
@@ -10,15 +10,13 @@ function start() {
   }else{
     apiWeather = new API_WEATHER(city);
   }
-  
+
   // Appel de la fonction fetchTodayForecast
   apiWeather
     .fetchTodayForecast()
     .then(function(response) {
       // Récupère la donnée d'une API
       const data = response.data;
-      //console.log(data);
-      console.log(response);
 
       // On récupère l'information principal
       const main = data.weather[0].main;
@@ -26,7 +24,9 @@ function start() {
       const temp = data.main.temp;
       const icon = apiWeather.getHTMLElementFromIcon(data.weather[0].icon);
 
+
       // Modifier le DOM
+      document.getElementById('city').innerHTML = 'Aujourd\'hui - ' + data.name;
       document.getElementById('today-forecast-main').innerHTML = main;
       document.getElementById('today-forecast-more-info').innerHTML = description;
       document.getElementById('icon-weather-container').innerHTML = icon;
@@ -44,27 +44,30 @@ function start() {
   .then(function(response) {
     // Récupère la donnée d'une API
     const data = response.data.list;
-
     let i=1;
-
+    
     while(i<=data.length){
 
       data.map(element =>{
         
-        console.log('element' , element);
         // On récupère l'information principal
         const main = element.weather[0].main;
         const description = element.weather[0].description;
         const temp = element.temp.day;
         const icon = apiWeather.getHTMLElementFromIcon(element.weather[0].icon);
+        const dt = element.dt;
+        const date = new Date(dt*1000);
         // Modifier le DOM
 
-        document.getElementById('today-forecast-main-next' +(i).toString()).innerHTML = main;
-        document.getElementById('today-forecast-more-info-next'+(i).toString()).innerHTML = description;
-        document.getElementById('icon-weather-container-next'+(i).toString()).innerHTML = icon;
-        document.getElementById('today-forecast-temp-next'+(i).toString()).innerHTML = `${temp}°C`;
+        document.getElementById(`today-forecast-main-next${i.toString()}`).innerHTML = main;
+        document.getElementById(`today-forecast-more-info-next${i.toString()}`).innerHTML = description;
+        document.getElementById(`icon-weather-container-next${i.toString()}`).innerHTML = icon;
+        document.getElementById(`today-forecast-temp-next${i.toString()}`).innerHTML = `${temp}°C`;
+        document.getElementById(`date${i.toString()}`).innerHTML = date.toDateString();
         i++;
-
+        for(let j=4;j<15;j++){
+            document.getElementById(`nextDay${j.toString()}`).style.display = 'none';
+        }
       })
 
     }
@@ -74,6 +77,62 @@ function start() {
     // Affiche une erreur
     console.error(error);
   });
+
+  if(numberDays != undefined){
+
+    apiWeather
+    .getTwoWeekForecast()
+    .then(function(response) {
+      // Récupère la donnée d'une API
+      const data = response.data.list;
+      let i=1;
+
+        for(let j=0;j<numberDays;j++){
+
+          for(let k=4;k<=numberDays;k++){
+              document.getElementById(`nextDay${k.toString()}`).style.display = 'unset';
+          }
+          
+          // On récupère l'information principal
+          const main = data[j].weather[0].main;
+          const description = data[j].weather[0].description;
+          const temp = data[j].temp.day;
+          const icon = apiWeather.getHTMLElementFromIcon(data[j].weather[0].icon);
+          const dt = data[j].dt;
+          const date = new Date(dt*1000);
+
+          // Modifier le DOM
+          document.getElementById(`today-forecast-main-next${i.toString()}`).innerHTML = main;
+          document.getElementById(`today-forecast-more-info-next${i.toString()}`).innerHTML = description;
+          document.getElementById(`icon-weather-container-next${i.toString()}`).innerHTML = icon;
+          document.getElementById(`today-forecast-temp-next${i.toString()}`).innerHTML = `${temp}°C`;
+          document.getElementById(`date${i.toString()}`).innerHTML = date.toDateString();
+          
+          i++;
+
+        }
+      
+    })
+    .catch(function(error) {
+      // Affiche une erreur
+      console.error(error);
+    });
+    
+  }
       
 }
 
+const moreDays = () => {
+
+  let select  = document.getElementById('daysOption');
+
+  select.addEventListener('change', ()=>{
+    if(select.value==='7 jours'){
+      generateDays(7);
+    }else if(select.value==='14 jours'){
+      generateDays(14);
+    }else if(select.value==='4 jours'){
+      generateDays();
+    }
+  })
+}

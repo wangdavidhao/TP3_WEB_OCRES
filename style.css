@@ -12,3 +12,12 @@
     margin: auto;
   }
 }
+
+
+body{
+  background: linear-gradient(#00d4ff, #090979 );
+}
+
+.logo{
+  object-fit: contain;
+}
