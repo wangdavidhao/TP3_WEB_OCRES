@@ -14,7 +14,7 @@
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
 
-<body onload='generateDays()'>
+<body onload='generateDays(4)'>
   <div
     class="d-flex flex-column flex-md-row align-items-center justify-content-center p-3  mb-3 bg-white border-bottom shadow-sm">
     <h5 class="my-0  font-weight-normal t text-center">METEO PREDICTION TP3<img class="logo" src="weather.png"
@@ -33,8 +33,7 @@
       <div class="input-group col-6">
         <input id="city-input" type="text" class="form-control" placeholder="Rentrer le nom d'une ville">
         <div class="input-group-append">
-          <button id="city-input-button" class="btn btn-success" type="submit"
-            onclick='generateDays()'>Actualiser</button>
+          <button id="city-input-button" class="btn btn-success" type="submit" onclick='moreDays()'>Actualiser</button>
         </div>
       </div>
 
